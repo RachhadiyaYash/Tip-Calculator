@@ -3,26 +3,27 @@ import React, { useState } from "react";
 export default function TipCalculator() {
   const [billAmount, setBillAmount] = useState("");
   const [tipPercentage, setTipPercentage] = useState(10);
-  const [splitBy, setSplitBy] = useState(1);
+  const [splitBy, setSplitBy] = useState("1");
 
   const handleReset = () => {
     setBillAmount("");
     setTipPercentage(10);
-    setSplitBy(1);
+    setSplitBy("1");
   };
 
   const calculateTip = () => {
     const amount = parseFloat(billAmount) || 0;
     const tipAmount = (amount * tipPercentage) / 100;
     const total = amount + tipAmount;
-    const perPerson = splitBy ? total / splitBy : 0;
+    const split = parseInt(splitBy) || 1; // Ensure split is at least 1
+    const perPerson = total / split;
     return { tipAmount, total, perPerson };
   };
 
   const { tipAmount, total, perPerson } = calculateTip();
 
   return (
-    <div className="flex justify-center items-center min-h-screen  p-4">
+    <div className="flex justify-center items-center min-h-screen p-4">
       <div className="flex md:flex-row flex-col w-full max-w-4xl bg-white shadow-md rounded-lg overflow-hidden ">
         <div className="flex flex-col md:w-1/2 w-full p-6 space-y-4 ">
           <p className="font-bold text-3xl">Calculate Tip</p>
@@ -56,7 +57,7 @@ export default function TipCalculator() {
             type="number"
             placeholder="Split By"
             value={splitBy}
-            onChange={(e) => setSplitBy(parseFloat(e.target.value) || 1)}
+            onChange={(e) => setSplitBy(e.target.value)}
             className="p-2 border border-gray-300 rounded w-full"
           />
         </div>
